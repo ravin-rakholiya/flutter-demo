@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:CanLi/screens/home_screen.dart';
+import 'package:CanLi/screens/splash_screen.dart';
 void main() {
-  runApp( MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(
-        title: Text('CanLi'),
-        backgroundColor: const Color(0xFF1D2749),
-      ),
-
-    )
-  ));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen()));
 }
