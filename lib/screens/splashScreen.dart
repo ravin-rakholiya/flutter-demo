@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:CanLi/screens/homeScreen.dart';
+import 'package:CanLi/screens/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomeScreen()));
+          MaterialPageRoute(builder: (_) => const LoginScreen()));
     });
   }
 
