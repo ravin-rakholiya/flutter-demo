@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:CanLi/screens/homeScreen.dart';
-import 'package:CanLi/screens/profile.dart';
+import 'package:CanLi/screens/verifyOtp.dart';
 
-class FeedbackScreen extends StatelessWidget {
-  const FeedbackScreen({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +65,7 @@ class FeedbackScreen extends StatelessWidget {
                     Column(children: [
                       Padding(
                           padding: const EdgeInsets.only(top: 30.0),
-                          child: Text("Feedback",
+                          child: Text("PROFILE",
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               // softWrap: false,
@@ -87,7 +86,6 @@ class FeedbackScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
-                          keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             border: InputBorder.none,
@@ -115,7 +113,6 @@ class FeedbackScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
-                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             border: InputBorder.none,
@@ -132,7 +129,7 @@ class FeedbackScreen extends StatelessWidget {
                       ),
                       Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 200, 0),
-                          child: Text("FEEDBACK",
+                          child: Text("BIRTH-DATE",
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               // softWrap: false,
@@ -143,8 +140,6 @@ class FeedbackScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLength: 225,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             border: InputBorder.none,
@@ -154,12 +149,37 @@ class FeedbackScreen extends StatelessWidget {
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
-                                bottom: 20.0, left: 10.0, right: 10.0),
-                            labelText: "ENTER FEEDBACK",
-
+                                bottom: 10.0, left: 10.0, right: 10.0),
+                            labelText: "22/06/1998",
                           ),
-                          maxLines: 6,
-                       ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 200, 0),
+                          child: Text("LOCATION",
+                              overflow: TextOverflow.visible,
+                              maxLines: 1,
+                              // softWrap: false,
+                              style: TextStyle(
+                                  color: Colors.indigo,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20))),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            border: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                                borderSide: BorderSide(color: Colors.indigo)),
+                            filled: true,
+                            contentPadding: EdgeInsets.only(
+                                bottom: 10.0, left: 10.0, right: 10.0),
+                            labelText: "ONTARIO",
+                          ),
+                        ),
                       ),
 
                       Padding(
@@ -175,7 +195,7 @@ class FeedbackScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                      const ProfileScreen()),
+                                      const OTPVerification()),
                                 );
                               },
                               //Customizes this button's appearance
@@ -198,7 +218,7 @@ class FeedbackScreen extends StatelessWidget {
                                   )),
 
                               //Typically the button's label.
-                              child: const Text("    SUBMIT    ",
+                              child: const Text("    UPDATE    ",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
