@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CanLi/screens/homeScreen.dart';
-import 'package:CanLi/screens/feeback.dart';
 
-class OTPVerification extends StatelessWidget {
-  const OTPVerification({super.key});
+class FeedbackScreen extends StatelessWidget {
+  const FeedbackScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Material(
       color: Colors.white,
       child: Column(children: [
@@ -67,29 +65,28 @@ class OTPVerification extends StatelessWidget {
                     Column(children: [
                       Padding(
                           padding: const EdgeInsets.only(top: 30.0),
-                          child: Text("OTP VERIFICATION",
+                          child: Text("Feedback",
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               // softWrap: false,
                               style: TextStyle(
                                   color: Colors.indigo,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 30))),
+                                  fontSize: 40))),
                       Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 50, 200, 0),
-                          child: Text("Enter Code",
+                          padding: const EdgeInsets.fromLTRB(0, 0, 260, 0),
+                          child: Text("Name",
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               // softWrap: false,
                               style: TextStyle(
                                   color: Colors.indigo,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 22))),
+                                  fontSize: 20))),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 6,
+                          keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             border: InputBorder.none,
@@ -100,10 +97,70 @@ class OTPVerification extends StatelessWidget {
                             filled: true,
                             contentPadding: EdgeInsets.only(
                                 bottom: 10.0, left: 10.0, right: 10.0),
-                            labelText: "###-###",
+                            labelText: "EX. NICK JONES",
                           ),
                         ),
                       ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 160, 0),
+                          child: Text("EMAIL ADDRESS",
+                              overflow: TextOverflow.visible,
+                              maxLines: 1,
+                              // softWrap: false,
+                              style: TextStyle(
+                                  color: Colors.indigo,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20))),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
+                        child: TextField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            border: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                                borderSide: BorderSide(color: Colors.indigo)),
+                            filled: true,
+                            contentPadding: EdgeInsets.only(
+                                bottom: 10.0, left: 10.0, right: 10.0),
+                            labelText: "EXAMPLE@GMAIL.COM",
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 200, 0),
+                          child: Text("FEEDBACK",
+                              overflow: TextOverflow.visible,
+                              maxLines: 1,
+                              // softWrap: false,
+                              style: TextStyle(
+                                  color: Colors.indigo,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20))),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
+                        child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLength: 225,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            border: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)),
+                                borderSide: BorderSide(color: Colors.indigo)),
+                            filled: true,
+                            contentPadding: EdgeInsets.only(
+                                bottom: 20.0, left: 10.0, right: 10.0),
+                            labelText: "ENTER FEEDBACK",
+
+                          ),
+                          maxLines: 6,
+                       ),
+                      ),
+
                       Padding(
                           padding: const EdgeInsets.fromLTRB(40, 35, 40, 0),
                           child: Container(
@@ -117,7 +174,7 @@ class OTPVerification extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                      const FeedbackScreen()),
+                                      const HomeScreen()),
                                 );
                               },
                               //Customizes this button's appearance
@@ -140,11 +197,11 @@ class OTPVerification extends StatelessWidget {
                                   )),
 
                               //Typically the button's label.
-                              child: const Text("    Sign In    ",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22)),
+                              child: const Text("    SUBMIT    ",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22),),
                             ),
                           ))
                     ]),

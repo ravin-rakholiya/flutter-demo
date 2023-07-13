@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CanLi/screens/verifyOtp.dart';
 import 'package:CanLi/screens/signup.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+final Uri _url = Uri.parse(
+    'https://cornateam.github.io/Privacy-and-Condition/web/privacy_policy.html');
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _launchUrl() async {
+      if (!await launchUrl(_url)) {
+        throw Exception('Could not launch $_url');
+      }
+    }
+
     return Material(
       color: Colors.white,
       child: Column(children: [
@@ -239,8 +249,7 @@ class LoginScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                  const SignUpScreen()),
+                                  builder: (context) => const SignUpScreen()),
                             );
                           },
                           child: Text(
@@ -263,11 +272,22 @@ class LoginScreen extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12)),
                             Spacer(),
-                            Text("Privacy & Terms",
+                            // Text("",
+                            //     style: TextStyle(
+                            //         color: Colors.blueGrey,
+                            //         fontWeight: FontWeight.bold,
+                            //         fontSize: 12)),
+
+                            InkWell(
+                              onTap: _launchUrl,
+                              child: Text(
+                                "Privacy & Terms",
                                 style: TextStyle(
-                                    color: Colors.blueGrey,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 12)),
+                                    color: Colors.blueGrey,
+                                    fontSize: 12),
+                              ),
+                            ),
                           ],
                         )),
                       ),
