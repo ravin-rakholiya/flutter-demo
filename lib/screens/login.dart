@@ -4,8 +4,8 @@ import 'package:CanLi/screens/verifyOtp.dart';
 import 'package:CanLi/screens/signup.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final Uri _url = Uri.parse(
-    'https://cornateam.github.io/Privacy-and-Condition/web/privacy_policy.html');
+final Uri _url =
+    Uri.parse('https://canli-team.github.io/Canli/privacypolicyterms.htmlx');
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -223,7 +223,7 @@ class LoginScreen extends StatelessWidget {
                                 children: [
                                   Image.asset(
                                       "images/logo/google_logo.png"), // <-- Use 'Image.asset(...)' here
-                                  SizedBox(width: 22),
+                                  SizedBox(width: 2),
                                   Text(' Continue with Google     '),
                                 ],
                               ),
@@ -262,7 +262,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(15, 50, 15, 15),
+                        padding: EdgeInsets.fromLTRB(15, 24, 15, 15),
                         child: Container(
                             child: Row(
                           children: [

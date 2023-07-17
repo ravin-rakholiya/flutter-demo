@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:CanLi/screens/homeScreen.dart';
-import 'package:CanLi/screens/profile.dart';
 import 'package:CanLi/screens/feeback.dart';
 
 class OTPVerification extends StatelessWidget {

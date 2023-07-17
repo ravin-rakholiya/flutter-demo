@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:CanLi/screens/homeScreen.dart';
 import 'package:CanLi/screens/profile.dart';
 
 class FeedbackScreen extends StatelessWidget {
@@ -16,18 +14,18 @@ class FeedbackScreen extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width / 1.6,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(child: Image.asset("images/logo/CanLi_logo.png")),
-                    Column(children: [
-                      Padding(
-                          padding: const EdgeInsets.only(top: 80.0),
-                          child: Text("CANLI",
+                    const Column(children: [
+                      const Padding(
+                          padding: EdgeInsets.only(top: 80.0),
+                          child: const Text("CANLI",
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               softWrap: false,
@@ -54,17 +52,17 @@ class FeedbackScreen extends StatelessWidget {
               // height: 537.5,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width + 145,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color(0xFFF2F2FA),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(100),
                       topRight: Radius.circular(100))),
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Column(children: [
-                      Padding(
+                      const Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: Text("Feedback",
                               overflow: TextOverflow.visible,
@@ -74,7 +72,7 @@ class FeedbackScreen extends StatelessWidget {
                                   color: Colors.indigo,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 40))),
-                      Padding(
+                      const Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 260, 0),
                           child: Text("Name",
                               overflow: TextOverflow.visible,
@@ -84,7 +82,7 @@ class FeedbackScreen extends StatelessWidget {
                                   color: Colors.indigo,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20))),
-                      Padding(
+                      const Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
                           keyboardType: TextInputType.name,
@@ -93,7 +91,7 @@ class FeedbackScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -102,7 +100,7 @@ class FeedbackScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
+                      const Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 160, 0),
                           child: Text("EMAIL ADDRESS",
                               overflow: TextOverflow.visible,
@@ -112,7 +110,7 @@ class FeedbackScreen extends StatelessWidget {
                                   color: Colors.indigo,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20))),
-                      Padding(
+                      const Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
                           keyboardType: TextInputType.emailAddress,
@@ -121,7 +119,7 @@ class FeedbackScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -130,7 +128,7 @@ class FeedbackScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
+                      const Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 200, 0),
                           child: Text("FEEDBACK",
                               overflow: TextOverflow.visible,
@@ -140,7 +138,7 @@ class FeedbackScreen extends StatelessWidget {
                                   color: Colors.indigo,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20))),
-                      Padding(
+                      const Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
                           keyboardType: TextInputType.multiline,
@@ -150,20 +148,18 @@ class FeedbackScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
                                 bottom: 20.0, left: 10.0, right: 10.0),
                             labelText: "ENTER FEEDBACK",
-
                           ),
                           maxLines: 6,
-                       ),
+                        ),
                       ),
-
                       Padding(
-                          padding: const EdgeInsets.fromLTRB(40, 35, 40, 0),
+                          padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
                           child: Container(
                             child: TextButton(
                               //True if this widget will be selected as the initial focus when no other node in its scope is currently focused.
@@ -175,14 +171,13 @@ class FeedbackScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                      const ProfileScreen()),
+                                          const ProfileScreen()),
                                 );
                               },
                               //Customizes this button's appearance
                               style: TextButton.styleFrom(
                                   primary: Colors.white,
-                                  backgroundColor:
-                                  Colors.indigo,
+                                  backgroundColor: Colors.indigo,
                                   onSurface: Colors.indigo,
                                   shadowColor: Colors.indigo,
                                   elevation: 5,
@@ -198,11 +193,13 @@ class FeedbackScreen extends StatelessWidget {
                                   )),
 
                               //Typically the button's label.
-                              child: const Text("    SUBMIT    ",
+                              child: const Text(
+                                "    SUBMIT    ",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 22),),
+                                    fontSize: 22),
+                              ),
                             ),
                           ))
                     ]),
