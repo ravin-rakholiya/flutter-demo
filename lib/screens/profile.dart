@@ -19,7 +19,7 @@ class ProfileScreen extends StatelessWidget {
                 color: Colors.white,
               ),
               child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(child: Image.asset("images/logo/CanLi_logo.png")),
@@ -59,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                       topLeft: Radius.circular(100),
                       topRight: Radius.circular(100))),
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Column(children: [
@@ -91,7 +91,7 @@ class ProfileScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -118,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -145,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -172,7 +172,7 @@ class ProfileScreen extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -181,7 +181,6 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       Padding(
                           padding: const EdgeInsets.fromLTRB(40, 35, 40, 0),
                           child: Container(
@@ -195,14 +194,13 @@ class ProfileScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                      const OTPVerification()),
+                                           OTPVerification()),
                                 );
                               },
                               //Customizes this button's appearance
                               style: TextButton.styleFrom(
                                   primary: Colors.white,
-                                  backgroundColor:
-                                  Colors.indigo,
+                                  backgroundColor: Colors.indigo,
                                   onSurface: Colors.indigo,
                                   shadowColor: Colors.indigo,
                                   elevation: 5,
@@ -218,11 +216,13 @@ class ProfileScreen extends StatelessWidget {
                                   )),
 
                               //Typically the button's label.
-                              child: const Text("    UPDATE    ",
+                              child: const Text(
+                                "    UPDATE    ",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 22),),
+                                    fontSize: 22),
+                              ),
                             ),
                           ))
                     ]),

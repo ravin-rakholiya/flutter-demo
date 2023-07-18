@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CanLi/screens/feeback.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
 
-class OTPVerification extends StatelessWidget {
-  const OTPVerification({super.key});
+class OTPVerification extends StatefulWidget {
+  OTPVerification({super.key});
+  @override
+  State<StatefulWidget> createState() {
+    return _OTPVerificationState();
+  }
+}
 
+class _OTPVerificationState extends State<OTPVerification> {
+  final otpController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-
     return Material(
       color: Colors.white,
       child: Column(children: [
@@ -20,7 +29,7 @@ class OTPVerification extends StatelessWidget {
                 color: Colors.white,
               ),
               child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(child: Image.asset("images/logo/CanLi_logo.png")),
@@ -60,7 +69,7 @@ class OTPVerification extends StatelessWidget {
                       topLeft: Radius.circular(100),
                       topRight: Radius.circular(100))),
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Column(children: [
@@ -87,6 +96,7 @@ class OTPVerification extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
+                          controller: otpController,
                           keyboardType: TextInputType.number,
                           maxLength: 6,
                           decoration: InputDecoration(
@@ -94,7 +104,7 @@ class OTPVerification extends StatelessWidget {
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
+                                    BorderRadius.all(Radius.circular(15.0)),
                                 borderSide: BorderSide(color: Colors.indigo)),
                             filled: true,
                             contentPadding: EdgeInsets.only(
@@ -111,19 +121,60 @@ class OTPVerification extends StatelessWidget {
                               autofocus: true,
                               //Called when the button is tapped or otherwise activated.
                               onPressed: () {
+                                final postData = {
+                                  'otp': otpController.text,
+                                  'otp_verification_id': "email",
+                                  'email': "email",
+                                  'full_name': "Ontario"
+                                };
+                                networkAPICall().httpPostRequest(
+                                    'api/v1/user/verify_otp', postData,
+                                    (status, responseData) {
+                                  print(status);
+                                  print(status);
+                                  if (status) {
+                                    final mainJson = json.decode(responseData);
+                                    print(mainJson);
+                                    String message = mainJson['message'];
+                                    int otp_verification_id =
+                                        mainJson['otp_verification_id'];
+                                    print(message);
+                                    print(otp_verification_id);
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => OTPVerification(),
+                                      ),
+                                    );
+                                  } else {
+                                    print(responseData);
+                                    var responseJson =
+                                        json.decode(responseData);
+                                    print(responseJson['message']);
+
+                                    Fluttertoast.showToast(
+                                        msg: responseJson['message'],
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                });
                                 // ignore: avoid_print
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const FeedbackScreen()),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) =>
+                                //           const FeedbackScreen()),
+                                // );
                               },
                               //Customizes this button's appearance
                               style: TextButton.styleFrom(
                                   primary: Colors.white,
-                                  backgroundColor:
-                                  Colors.indigo,
+                                  backgroundColor: Colors.indigo,
                                   onSurface: Colors.indigo,
                                   shadowColor: Colors.indigo,
                                   elevation: 5,

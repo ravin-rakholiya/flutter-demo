@@ -7,7 +7,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-
     );
   }
 }

@@ -9,9 +9,6 @@ class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
   @override
   State<StatefulWidget> createState() {
-// TODO: implement createState
-
-
     return _SignUpScreenState();
   }
 }
@@ -23,9 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final locationController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -246,10 +241,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             //Called when the button is tapped or otherwise activated.
                                             onPressed: () {
                                               print("200------------");
-                                              String name = nameController.text.trim();
-                                              String email = emailController.text.trim();
-                                              String birthDate = birthdateController.text.trim();
-                                              String location = locationController.text.trim();
+                                              String name =
+                                                  nameController.text.trim();
+                                              String email =
+                                                  emailController.text.trim();
+                                              String birthDate =
+                                                  birthdateController.text
+                                                      .trim();
+                                              String location =
+                                                  locationController.text
+                                                      .trim();
                                               final postData = {
                                                 'full_name': name,
                                                 'email': email,
@@ -257,41 +258,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 'location': location
                                               };
                                               networkAPICall().httpPostRequest(
-                                                  'api/v1/user/generate_otp', postData,
-                                                      (status, responseData) {
-                                                    print(status);
-                                                    print(status);
-                                                    if (status) {
-                                                      final mainJson = json.decode(responseData);
-                                                      print(mainJson);
-                                                      String message = mainJson['message'];
-                                                      int otp_verification_id =
-                                                      mainJson['otp_verification_id'];
-                                                      print(message);
-                                                      print(otp_verification_id);
-
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) => OTPVerification(),
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      print(responseData);
-                                                      var responseJson =
+                                                  'api/v1/user/generate_otp',
+                                                  postData,
+                                                  (status, responseData) {
+                                                print(status);
+                                                print(status);
+                                                if (status) {
+                                                  final mainJson =
                                                       json.decode(responseData);
-                                                      print(responseJson['message']);
+                                                  print(mainJson);
+                                                  String message =
+                                                      mainJson['message'];
+                                                  int otp_verification_id =
+                                                      mainJson[
+                                                          'otp_verification_id'];
+                                                  print(message);
+                                                  print(otp_verification_id);
 
-                                                      Fluttertoast.showToast(
-                                                          msg: responseJson['message'],
-                                                          toastLength: Toast.LENGTH_SHORT,
-                                                          gravity: ToastGravity.CENTER,
-                                                          timeInSecForIosWeb: 1,
-                                                          backgroundColor: Colors.red,
-                                                          textColor: Colors.white,
-                                                          fontSize: 16.0);
-                                                    }
-                                                  });
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          OTPVerification(),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  print(responseData);
+                                                  var responseJson =
+                                                      json.decode(responseData);
+                                                  print(
+                                                      responseJson['message']);
+
+                                                  Fluttertoast.showToast(
+                                                      msg: responseJson[
+                                                          'message'],
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                }
+                                              });
                                             },
                                             //Customizes this button's appearance
                                             style: TextButton.styleFrom(

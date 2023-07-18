@@ -29,11 +29,15 @@ class networkAPICall {
         final d = response.body;
         print('WebServiceRequest - $serviceUrl \nResponse - $d');
         completionHandler(true, d);
-      } else if(response.statusCode == 422){
+      } else if(response.statusCode == 422 ){
         final d = response.body;
         print('WebServiceRequest - $serviceUrl \nResponse - $d');
         completionHandler(false, d);
-      } else {
+      } else if(response.statusCode == 400 ) {
+        final d = response.body;
+        print('WebServiceRequest - $serviceUrl \nResponse - $d');
+        completionHandler(false, d);
+      }else {
         completionHandler(false, "error");
       }
     } catch (e) {

@@ -172,7 +172,6 @@ class LoginScreen extends StatelessWidget {
                                         fontSize: 16.0);
                                   }
                                 });
-
                               },
                               style: TextButton.styleFrom(
                                   primary: Colors.white,
@@ -236,7 +235,7 @@ class LoginScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const OTPVerification()),
+                                           OTPVerification()),
                                 );
                               },
                               //Customizes this button's appearance
