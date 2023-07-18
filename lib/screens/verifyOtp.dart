@@ -4,6 +4,7 @@ import 'package:CanLi/screens/feeback.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OTPVerification extends StatefulWidget {
   OTPVerification({super.key});
@@ -15,6 +16,36 @@ class OTPVerification extends StatefulWidget {
 
 class _OTPVerificationState extends State<OTPVerification> {
   final otpController = TextEditingController();
+  String? _email = '';
+  String? _full_name = '';
+  String? _location_city = '';
+  String? _test_date = '';
+  String? _dob = '';
+  int? _otp_verification_id = 0;
+
+  addStringToSF(
+      String token,
+      int user_id,
+      ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("31----------");
+    print(token);
+    print(user_id);
+    prefs.setString('token', token);
+    prefs.setInt('user_id', user_id);
+  }
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    // String std = prefs.getString('user_id');
+    _email = prefs.getString('email');
+    _otp_verification_id = prefs.getInt('otp_verification_id');
+    _full_name = prefs.getString('full_name');
+    _location_city = prefs.getString('location_city');
+    _test_date = prefs.getString('test_date');
+    _dob = prefs.getString('dob');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -120,41 +151,77 @@ class _OTPVerificationState extends State<OTPVerification> {
                               //True if this widget will be selected as the initial focus when no other node in its scope is currently focused.
                               autofocus: true,
                               //Called when the button is tapped or otherwise activated.
-                              onPressed: () {
-                                final postData = {
-                                  'otp': otpController.text,
-                                  'otp_verification_id': "email",
-                                  'email': "email",
-                                  'full_name': "Ontario"
-                                };
+                              onPressed: () async {
+                                getStringValuesSF();
+                                print(await _otp_verification_id);
+                                var postData;
+                                if (_full_name == '') {
+                                  postData = {
+                                    'otp': otpController.text,
+                                    'otp_verification_id':
+                                        await _otp_verification_id,
+                                    'email': await _email,
+                                  };
+                                } else {
+                                  postData = {
+                                    'otp': otpController.text,
+                                    'otp_verification_id':
+                                        await _otp_verification_id,
+                                    'email': await _email,
+                                    'full_name': await _full_name,
+                                    'test_date': await _test_date,
+                                    'location_city': await _location_city,
+                                    'dob': await _dob,
+                                  };
+                                }
+                                print("145-------");
+                                print(postData);
                                 networkAPICall().httpPostRequest(
                                     'api/v1/user/verify_otp', postData,
                                     (status, responseData) {
+                                  print("149-----------");
                                   print(status);
-                                  print(status);
+                                  print(responseData);
+                                  print("152----------");
                                   if (status) {
                                     final mainJson = json.decode(responseData);
                                     print(mainJson);
-                                    String message = mainJson['message'];
-                                    int otp_verification_id =
-                                        mainJson['otp_verification_id'];
-                                    print(message);
-                                    print(otp_verification_id);
-
+                                    String token = mainJson['token'];
+                                    print("179--------");
+                                    addStringToSF(token, mainJson['user']['id']);
+                                    print(mainJson['user']);
+                                    print(mainJson['user']['id']);
+                                    print(mainJson['user']['location_city']);
+                                    print((mainJson['user']['email_verified']).runtimeType);
+                                    print((mainJson['user']['test_date']).runtimeType);
+                                    print((mainJson['user']['dob']).runtimeType);
+                                    int id = mainJson['user']['id'];
+                                    String full_name =
+                                        mainJson['user']['full_name'];
+                                    String dob = mainJson['user']['dob'];
+                                    // String gender = mainJson['user']['gender'];
+                                    String location_city =
+                                        mainJson['user']['location_city'];
+                                    bool email_verified =
+                                        mainJson['user']['email_verified'];
+                                    String test_date =
+                                        mainJson['user']['test_date'];
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => OTPVerification(),
+                                        builder: (context) => FeedbackScreen(),
                                       ),
                                     );
                                   } else {
+                                    print("198------");
                                     print(responseData);
                                     var responseJson =
                                         json.decode(responseData);
-                                    print(responseJson['message']);
-
+                                    print(responseJson);
+                                    print(responseJson['error']);
+                                    print("204-------");
                                     Fluttertoast.showToast(
-                                        msg: responseJson['message'],
+                                        msg: responseJson['error'],
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,
