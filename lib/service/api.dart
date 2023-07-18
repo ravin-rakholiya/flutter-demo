@@ -24,7 +24,10 @@ class networkAPICall {
       print(postData);
       var response = await http.post(Uri.parse(this.host + serviceUrl),
           body: json.encode(postData),headers: {"Content-Type":"application/json"});
+      print("=======response===========");
       print(response.body);
+      print("======status code=========");
+      print(response.statusCode);
       if (response.statusCode == 200) {
         final d = response.body;
         print('WebServiceRequest - $serviceUrl \nResponse - $d');

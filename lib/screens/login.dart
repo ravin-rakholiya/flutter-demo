@@ -6,17 +6,29 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final Uri _url =
     Uri.parse('https://canli-team.github.io/Canli/privacypolicyterms.htmlx');
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-
+  addStringToSF(
+      String email,
+      int otp_verification_id,
+      ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("21-------");
+    print(email);
+    print(otp_verification_id);
+    prefs.setString('email', email);
+    prefs.setInt('otp_verification_id', otp_verification_id);
+  }
   final emailController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+
+
     Future<void> _launchUrl() async {
       if (!await launchUrl(_url)) {
         throw Exception('Could not launch $_url');
@@ -139,8 +151,6 @@ class LoginScreen extends StatelessWidget {
                                 networkAPICall().httpPostRequest(
                                     'api/v1/user/generate_otp', postData,
                                     (status, responseData) {
-                                  print(status);
-                                  print(status);
                                   if (status) {
                                     final mainJson = json.decode(responseData);
                                     print(mainJson);
@@ -149,7 +159,11 @@ class LoginScreen extends StatelessWidget {
                                         mainJson['otp_verification_id'];
                                     print(message);
                                     print(otp_verification_id);
+                                    addStringToSF(
+                                      email,
+                                      otp_verification_id,
 
+                                    );
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -160,10 +174,10 @@ class LoginScreen extends StatelessWidget {
                                     print(responseData);
                                     var responseJson =
                                         json.decode(responseData);
-                                    print(responseJson['message']);
+                                    print(responseJson['error']);
 
                                     Fluttertoast.showToast(
-                                        msg: responseJson['message'],
+                                        msg: responseJson['error'],
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,

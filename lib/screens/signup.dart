@@ -4,6 +4,7 @@ import 'package:CanLi/screens/verifyOtp.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -18,6 +19,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final birthdateController = TextEditingController();
   final locationController = TextEditingController();
+  final testDateController = TextEditingController();
+  addStringToSF(
+      String email,
+      int otp_verification_id,
+      String full_name,
+      String location_city,
+      String test_date,
+      String dob,
+      ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(email);
+    print(otp_verification_id);
+    prefs.setString('email', email);
+    prefs.setString('full_name', full_name);
+    prefs.setString('location_city', location_city);
+    prefs.setString('test_date', test_date);
+    prefs.setString('dob', dob);
+    prefs.setInt('otp_verification_id', otp_verification_id);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   Column(children: [
                                     Padding(
                                         padding:
-                                            const EdgeInsets.only(top: 80.0),
+                                            const EdgeInsets.only(top: 70.0),
                                         child: Text("CANLI",
                                             overflow: TextOverflow.visible,
                                             maxLines: 1,
@@ -76,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Container(
                             // height: 537.5,
                             width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.width + 145,
+                            height: MediaQuery.of(context).size.width + 220,
                             decoration: BoxDecoration(
                                 color: Color(0xFFF2F2FA),
                                 borderRadius: BorderRadius.only(
@@ -194,7 +214,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               bottom: 10.0,
                                               left: 10.0,
                                               right: 10.0),
-                                          labelText: "22/06/1998",
+                                          labelText: "YYYY-MM-DD",
                                         ),
                                       ),
                                     ),
@@ -233,6 +253,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                     Padding(
                                         padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 200, 0),
+                                        child: Text("TEST DATE",
+                                            overflow: TextOverflow.visible,
+                                            maxLines: 1,
+                                            // softWrap: false,
+                                            style: TextStyle(
+                                                color: Colors.indigo,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20))),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          40, 5, 40, 0),
+                                      child: TextField(
+                                        controller: testDateController,
+                                        decoration: InputDecoration(
+                                          fillColor: Colors.white,
+                                          border: InputBorder.none,
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(15.0)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.indigo)),
+                                          filled: true,
+                                          contentPadding: EdgeInsets.only(
+                                              bottom: 10.0,
+                                              left: 10.0,
+                                              right: 10.0),
+                                          labelText: "YYYY-MM-DD",
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.fromLTRB(
                                             40, 35, 40, 0),
                                         child: Container(
                                           child: TextButton(
@@ -251,11 +304,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               String location =
                                                   locationController.text
                                                       .trim();
+                                              String testDate = testDateController.text.trim();
+                                              // String email,
+                                              //     int otp_verification_id,
+                                              // String full_name,
+                                              // String location_city,
+                                              // String test_date,
+                                              // String dob,
+
                                               final postData = {
                                                 'full_name': name,
                                                 'email': email,
                                                 'birthDate': birthDate,
-                                                'location': location
+                                                'location': location,
+                                                'test_date': testDate
                                               };
                                               networkAPICall().httpPostRequest(
                                                   'api/v1/user/generate_otp',
@@ -274,7 +336,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                           'otp_verification_id'];
                                                   print(message);
                                                   print(otp_verification_id);
-
+                                                  addStringToSF(email, otp_verification_id, name, location, testDate, birthDate);
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -291,7 +353,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                                                   Fluttertoast.showToast(
                                                       msg: responseJson[
-                                                          'message'],
+                                                          'error'],
                                                       toastLength:
                                                           Toast.LENGTH_SHORT,
                                                       gravity:
