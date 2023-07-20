@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:CanLi/screens/homeScreen.dart';
 class OTPVerification extends StatefulWidget {
   OTPVerification({super.key});
   @override
@@ -209,7 +209,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => FeedbackScreen(),
+                                        builder: (context) => HomeScreen(),
                                       ),
                                     );
                                   } else {
