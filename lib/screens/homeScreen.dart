@@ -12,6 +12,11 @@ import 'package:CanLi/screens/starredNotes.dart';
 import 'package:CanLi/screens/ChallengeBank.dart';
 import 'package:CanLi/screens/moduleBasedLearningHome.dart';
 import 'package:CanLi/screens/profile.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
+import 'package:shared_preferences/shared_preferences.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
@@ -36,7 +41,6 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-
               // container for text - can be kept out of previous container
               Container(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -163,12 +167,47 @@ class HomeScreen extends StatelessWidget {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          bookmarkQuestionScreen()),
-                                );
+                                networkAPICall().httpGetRequest(
+                                    'api/v1/practice/bookmark/question',
+                                        (status, responseData) {
+                                      // print("173===================");
+                                      // print(json.decode(responseData));
+                                      // print(status);
+                                      if (status) {
+                                        final mainJson = json.decode(responseData);
+                                        // print(mainJson);
+                                        // List<dynamic> data = mainJson['response'];
+                                        // print(data);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  bookmarkQuestionScreen(response:mainJson['response'])),
+                                        );
+                                      } else {
+                                        print(responseData);
+                                        var responseJson =
+                                        json.decode(responseData);
+                                        print(
+                                            responseJson['message']);
+
+                                        Fluttertoast.showToast(
+                                            msg: responseJson[
+                                            'error'],
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
+
+
+
                               },
                             ),
                           ),

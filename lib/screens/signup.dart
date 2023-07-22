@@ -305,12 +305,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   locationController.text
                                                       .trim();
                                               String testDate = testDateController.text.trim();
-                                              // String email,
-                                              //     int otp_verification_id,
-                                              // String full_name,
-                                              // String location_city,
-                                              // String test_date,
-                                              // String dob,
 
                                               final postData = {
                                                 'full_name': name,
