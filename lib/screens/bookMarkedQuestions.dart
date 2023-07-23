@@ -9,15 +9,14 @@ import 'dart:convert' show json;
 
 class bookmarkQuestionScreen extends StatefulWidget {
   final List<dynamic> response;
-  const bookmarkQuestionScreen({Key? key, required this.response}) : super(key: key);
+  const bookmarkQuestionScreen({Key? key, required this.response})
+      : super(key: key);
 
   @override
   _bookmarkQuestionScreen createState() => _bookmarkQuestionScreen();
 }
 
 class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
-
-
   String title = "";
   // List<int> questionNo = [1, 2, 3, 4, 5];
   Map<int, bool> bookmark = {};
@@ -30,12 +29,11 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
   int index = 0;
 
   Padding generateQuestion(int index) {
-    if (widget.response[index]['question_type']=="sign"){
+    if (widget.response[index]['question_type'] == "sign") {
       String contentURL = widget.response[index]['content']['content'];
       return Padding(
-        padding: EdgeInsets.only(top: 50, left: 10),
-        child: Image.network(contentURL)
-      );
+          padding: EdgeInsets.only(top: 50, left: 10),
+          child: Image.network(contentURL));
     }
 
     return Padding(
@@ -94,14 +92,20 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    questions = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
+    questions = [
+      for (var i = 1; i <= widget.response.length; i++) i.toString()
+    ];
     answers = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
-    List<int> questionNo = [for (var i = 1; i <= widget.response.length; i++) i];
-    print(questionNo);
+    List<int> questionNo = [
+      for (var i = 1; i <= widget.response.length; i++) i
+    ];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text((questions[0] == "Nothing inside Bookmark page.") ? "".toString() : (questionNo[index]).toString(),
+        title: Text(
+            (questions[0] == "Nothing inside Bookmark page.")
+                ? "".toString()
+                : (questionNo[index]).toString(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
@@ -179,39 +183,37 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                                   if (questions.isNotEmpty) {
                                     questions.remove(questions[index]);
                                     answers.remove(answers[index]);
-                                    index = 0;
-                                    debugPrint(bookmark.toString());
-                                    print("184==============");
-                                    int question_id = widget.response[index]['id'];
+                                    int question_id =
+                                        widget.response[index]['id'];
                                     final postData = {
                                       'question_id': question_id,
                                       'bookmark': false,
-
                                     };
-                                    networkAPICall().httpPostRequest("api/v1/practice/bookmark/question", postData, (status, data) {
-                                      if(status){
+                                    networkAPICall().httpPostRequest(
+                                        "api/v1/practice/bookmark/question",
+                                        postData, (status, data) {
+                                      if (status) {
                                         Fluttertoast.showToast(
-                                            msg: "bookmark removed successfully.",
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
+                                            msg:
+                                                "bookmark removed successfully.",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
                                             timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
+                                            backgroundColor: Colors.red,
                                             textColor: Colors.white,
                                             fontSize: 16.0);
                                       }
                                     });
                                   }
                                   if (questions.isEmpty) {
-                                    questions = ["Nothing inside Bookmark page."];
+                                    questions = [
+                                      "Nothing inside Bookmark page."
+                                    ];
                                     answers = [""];
                                   }
                                 } catch (e) {
                                   debugPrint(e.toString());
                                 }
-                                debugPrint(bookmark.toString());
                               });
                             },
                             //Customizes this button's appearance
@@ -239,15 +241,18 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                                 Container(
                                   child: Padding(
                                     padding:
-                                    const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                        const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                     child: Row(
                                       children: [
                                         SizedBox(width: 10),
                                         Icon(Icons.bookmark_remove, size: 24),
-                                        Text('Remove', style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),),
+                                        Text(
+                                          'Remove',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                         height: 20,
                         width: MediaQuery.of(context).size.width - 50,
                         child: LinearProgressIndicator(
-                          value: initial,
+                          value: value/100,
                           semanticsLabel: 'Linear progress indicator',
                           backgroundColor: Colors.white,
                           valueColor:
@@ -348,65 +348,65 @@ class HomeScreen extends StatelessWidget {
                       // ),
                       // color: Colors.orange,
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(10, 10, 20, 10),
-                      height: 65,
-                      width: MediaQuery.of(context).size.width - 20,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(29, 39, 73, 1),
-                          borderRadius: BorderRadius.circular(25)),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 65,
-                            width: MediaQuery.of(context).size.width - 130,
-                            child: OutlinedButton(
-                              child: Text("Stared Notes"),
-                              style: OutlinedButton.styleFrom(
-                                textStyle: TextStyle(fontSize: 17),
-                                padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
-                                alignment: Alignment.centerLeft,
-                                foregroundColor: Colors.white,
-                                backgroundColor: Color.fromRGBO(29, 39, 73, 1),
-                                shape: const StadiumBorder(),
-                                side: BorderSide(color: Colors.transparent),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          starredNotesScreen()),
-                                );
-                              },
-                            ),
-                          ),
-                          Container(
-                            child: OutlinedButton(
-                              child: Image.asset(
-                                  "images/logo/bookmarked notes.png"),
-                              style: OutlinedButton.styleFrom(
-                                  alignment: Alignment.centerRight,
-                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                  backgroundColor:
-                                      Color.fromRGBO(29, 39, 73, 1),
-                                  shape: const StadiumBorder(),
-                                  side: BorderSide(color: Colors.transparent)),
-                              onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) =>
-                                //           const SignUpScreen()),
-                                // );
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      // ),
-                      // color: Colors.orange,
-                    ),
+                    // Container(
+                    //   margin: const EdgeInsets.fromLTRB(10, 10, 20, 10),
+                    //   height: 65,
+                    //   width: MediaQuery.of(context).size.width - 20,
+                    //   decoration: BoxDecoration(
+                    //       color: Color.fromRGBO(29, 39, 73, 1),
+                    //       borderRadius: BorderRadius.circular(25)),
+                    //   child: Row(
+                    //     children: [
+                    //       Container(
+                    //         height: 65,
+                    //         width: MediaQuery.of(context).size.width - 130,
+                    //         child: OutlinedButton(
+                    //           child: Text("Stared Notes"),
+                    //           style: OutlinedButton.styleFrom(
+                    //             textStyle: TextStyle(fontSize: 17),
+                    //             padding: EdgeInsets.fromLTRB(30, 0, 10, 0),
+                    //             alignment: Alignment.centerLeft,
+                    //             foregroundColor: Colors.white,
+                    //             backgroundColor: Color.fromRGBO(29, 39, 73, 1),
+                    //             shape: const StadiumBorder(),
+                    //             side: BorderSide(color: Colors.transparent),
+                    //           ),
+                    //           onPressed: () {
+                    //             Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) =>
+                    //                       starredNotesScreen()),
+                    //             );
+                    //           },
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         child: OutlinedButton(
+                    //           child: Image.asset(
+                    //               "images/logo/bookmarked notes.png"),
+                    //           style: OutlinedButton.styleFrom(
+                    //               alignment: Alignment.centerRight,
+                    //               padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    //               backgroundColor:
+                    //                   Color.fromRGBO(29, 39, 73, 1),
+                    //               shape: const StadiumBorder(),
+                    //               side: BorderSide(color: Colors.transparent)),
+                    //           onPressed: () {
+                    //             // Navigator.push(
+                    //             //   context,
+                    //             //   MaterialPageRoute(
+                    //             //       builder: (context) =>
+                    //             //           const SignUpScreen()),
+                    //             // );
+                    //           },
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    //   // ),
+                    //   // color: Colors.orange,
+                    // ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(10, 10, 20, 10),
                       height: 65,
@@ -431,11 +431,43 @@ class HomeScreen extends StatelessWidget {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChallengeBank()),
-                                );
+                                networkAPICall().httpGetRequest(
+                                    'api/v1/practice/challange/question',
+                                        (status, responseData) {
+                                      if (status) {
+                                        final mainJson = json.decode(responseData);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  practiceTest(response:mainJson['response'])),
+                                        );
+                                      } else {
+                                        print(responseData);
+                                        var responseJson =
+                                        json.decode(responseData);
+                                        print(
+                                            responseJson['message']);
+
+                                        Fluttertoast.showToast(
+                                            msg: responseJson[
+                                            'error'],
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => ChallengeBank()),
+                                // );
                               },
                             ),
                           ),

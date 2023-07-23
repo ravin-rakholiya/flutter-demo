@@ -9,7 +9,6 @@ import 'dart:convert' show json;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class practiceTest extends StatefulWidget {
-
   final List<dynamic> response;
   const practiceTest({Key? key, required this.response}) : super(key: key);
 
@@ -33,12 +32,11 @@ class _practiceTest extends State<practiceTest> {
   // bool selected = false;
 
   Padding generateQuestion(int index) {
-    if (widget.response[index]['question_type']=="sign"){
+    if (widget.response[index]['question_type'] == "sign") {
       String contentURL = widget.response[index]['content']['content'];
       return Padding(
           padding: EdgeInsets.only(top: 50, left: 10),
-          child: Image.network(contentURL)
-      );
+          child: Image.network(contentURL));
     }
 
     return Padding(
@@ -52,10 +50,11 @@ class _practiceTest extends State<practiceTest> {
         ),
       ),
     );
-
   }
 
   List generateNoOfOptions(int index) {
+    print("59------");
+    print(index);
     List opt = widget.response[index]['option'].split(";");
     List<Padding> pd = [];
     debugPrint(opt.toString());
@@ -70,10 +69,10 @@ class _practiceTest extends State<practiceTest> {
   Padding generateOption(String option) {
     var opt = option.trim();
     var opt_value = widget.response[index]['answer'].trim();
-    if(opt[opt.length-1]=="."){
+    if (opt[opt.length - 1] == ".") {
       opt = opt.trim().substring(0, opt.length - 1);
     }
-    if(opt_value[opt_value.toString().length-1] == "."){
+    if (opt_value[opt_value.toString().length - 1] == ".") {
       opt_value = opt_value.trim().substring(0, opt_value.length - 1);
     }
     print(opt_value);
@@ -139,11 +138,22 @@ class _practiceTest extends State<practiceTest> {
   @override
   Widget build(BuildContext context) {
     print("137-----------------");
-    List<int> questionNo = [for (var i = 1; i <= widget.response.length; i++) i];
-    questions = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
+    final List<int> questionNo = [
+      for (var i = 1; i <= widget.response.length; i++) i
+    ];
+    questions = [
+      for (var i = 1; i <= widget.response.length; i++) i.toString()
+    ];
     answers = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
     options = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
-
+    print(questionNo);
+    if (index == questionNo.length) {
+      index = 0;
+    }
+    print("***************");
+    print(widget.response[index]['is_bookmarked']);
+    print(widget.response[index]['id']);
+    print("***************");
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -188,7 +198,6 @@ class _practiceTest extends State<practiceTest> {
             ),
             Container(
               child: Row(
-                // padding: EdgeInsets.only(top: 24, left: 0),
                 children: [
                   Expanded(
                     flex: 1,
@@ -198,7 +207,7 @@ class _practiceTest extends State<practiceTest> {
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           icon: Icon(
-                            bookmark[index] == true
+                            widget.response[index]['is_bookmarked']
                                 ? Icons.bookmark
                                 : Icons.bookmark_outline,
                             color: Color(0xFF192A4F),
@@ -206,159 +215,117 @@ class _practiceTest extends State<practiceTest> {
                           ),
                           onPressed: () {
                             setState(() {
-                              // bookmark = true;
-                              debugPrint(bookmark[index].toString());
-                              print("207========");
-                              print(widget.response[index]['id']);
-                              print(bookmark[index]);
-                              if (bookmark[index] == null) {
-                                bookmark[index] = true;
+                              if (widget.response[index]['is_bookmarked'] ==
+                                  null) {
+                                widget.response[index]['is_bookmarked'] = true;
                                 final postData = {
                                   'question_id': widget.response[index]['id'],
                                   'bookmark': "True",
-
                                 };
                                 networkAPICall().httpPostRequest(
                                     'api/v1/practice/bookmark/question',
-                                    postData,
-                                        (status, responseData) {
-                                      if (status) {
-                                        final mainJson =
+                                    postData, (status, responseData) {
+                                  if (status) {
+                                    final mainJson = json.decode(responseData);
+                                    String message = mainJson['response'];
+                                    Fluttertoast.showToast(
+                                        msg: message,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  } else {
+                                    print(responseData);
+                                    var responseJson =
                                         json.decode(responseData);
-                                        String message =
-                                        mainJson['response'];
-                                        Fluttertoast.showToast(
-                                            msg: message,
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
 
-                                      } else {
-                                        print(responseData);
-                                        var responseJson =
-                                        json.decode(responseData);
-                                        print(
-                                            responseJson['message']);
-
-                                        Fluttertoast.showToast(
-                                            msg: responseJson[
-                                            'error'],
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      }
-                                    });
-                              } else if (bookmark[index] == false) {
-                                bookmark[index] = true;
+                                    Fluttertoast.showToast(
+                                        msg: responseJson['error'],
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                });
+                              } else if (widget.response[index]
+                                      ['is_bookmarked'] ==
+                                  false) {
+                                widget.response[index]['is_bookmarked'] = true;
 
                                 final postData = {
                                   'question_id': widget.response[index]['id'],
                                   'bookmark': "True",
-
                                 };
                                 networkAPICall().httpPostRequest(
                                     'api/v1/practice/bookmark/question',
-                                    postData,
-                                        (status, responseData) {
-                                      if (status) {
-                                        final mainJson =
+                                    postData, (status, responseData) {
+                                  if (status) {
+                                    final mainJson = json.decode(responseData);
+                                    String message = mainJson['response'];
+                                    Fluttertoast.showToast(
+                                        msg: message,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  } else {
+                                    print(responseData);
+                                    var responseJson =
                                         json.decode(responseData);
-                                        String message =
-                                        mainJson['response'];
-                                        Fluttertoast.showToast(
-                                            msg: message,
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
+                                    print(responseJson['message']);
 
-                                      } else {
-                                        print(responseData);
-                                        var responseJson =
-                                        json.decode(responseData);
-                                        print(
-                                            responseJson['message']);
-
-                                        Fluttertoast.showToast(
-                                            msg: responseJson[
-                                            'error'],
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      }
-                                    });
+                                    Fluttertoast.showToast(
+                                        msg: responseJson['error'],
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                });
                               } else {
-                                bookmark[index] = false;
+                                widget.response[index]['is_bookmarked'] = false;
                                 final postData = {
                                   'question_id': widget.response[index]['id'],
                                   'bookmark': "False",
-
                                 };
                                 networkAPICall().httpPostRequest(
                                     'api/v1/practice/bookmark/question',
-                                    postData,
-                                        (status, responseData) {
-                                      if (status) {
-                                        final mainJson =
+                                    postData, (status, responseData) {
+                                  if (status) {
+                                    final mainJson = json.decode(responseData);
+                                    String message = mainJson['response'];
+                                    Fluttertoast.showToast(
+                                        msg: message,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  } else {
+                                    print(responseData);
+                                    var responseJson =
                                         json.decode(responseData);
-                                        String message =
-                                        mainJson['response'];
-                                        Fluttertoast.showToast(
-                                            msg: message,
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
+                                    print(responseJson['error']);
 
-                                      } else {
-                                        print(responseData);
-                                        var responseJson =
-                                        json.decode(responseData);
-                                        print(
-                                            responseJson['error']);
-
-                                        Fluttertoast.showToast(
-                                            msg: responseJson[
-                                            'error'],
-                                            toastLength:
-                                            Toast.LENGTH_SHORT,
-                                            gravity:
-                                            ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor:
-                                            Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      }
-                                    });
+                                    Fluttertoast.showToast(
+                                        msg: responseJson['error'],
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                });
                               }
                               // debugPrint(bookmark.toString());
                             });
@@ -368,10 +335,6 @@ class _practiceTest extends State<practiceTest> {
                       ),
                     ),
                   ),
-                  // Expanded(
-                  //   flex: 1,
-                  //   child: Text(""),
-                  // ),
                   Expanded(
                     flex: 1,
                     child: Padding(
@@ -389,7 +352,7 @@ class _practiceTest extends State<practiceTest> {
                           //       const HomeScreen()),
                           // );
                           setState(() {
-                            if (index < 4) {
+                            if (index < widget.response.length) {
                               index++;
                             } else {
                               index = 0;
