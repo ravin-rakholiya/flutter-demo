@@ -56,11 +56,8 @@ class _ChallengeBank extends State<ChallengeBank> {
   }
 
   List generateNoOfOptions(int index) {
-    print("59------");
-    print(index);
     List opt = widget.response[index]['option'].split(";");
     List<Padding> pd = [];
-    debugPrint(opt.toString());
 
     for (int i = 0; i < opt.length; i++) {
       Padding wid = generateOption(opt[i]);
@@ -78,9 +75,6 @@ class _ChallengeBank extends State<ChallengeBank> {
     if(opt_value[opt_value.toString().length-1] == "."){
       opt_value = opt_value.trim().substring(0, opt_value.length - 1);
     }
-    print(opt_value);
-    print(opt);
-
     return Padding(
       padding: EdgeInsets.only(top: 24, left: 10, right: 10),
       child: Card(
@@ -100,8 +94,6 @@ class _ChallengeBank extends State<ChallengeBank> {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
-            // debugPrint('Card tapped.');
-            debugPrint(option);
             setState(() {
               if (selected[option] == null || false) {
                 selected[option] = true;
@@ -140,12 +132,10 @@ class _ChallengeBank extends State<ChallengeBank> {
 
   @override
   Widget build(BuildContext context) {
-    print("137-----------------");
     final List<int> questionNo = [for (var i = 1; i <= widget.response.length; i++) i];
     questions = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
     answers = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
     options = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
-    print(questionNo);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -207,10 +197,6 @@ class _ChallengeBank extends State<ChallengeBank> {
                           ),
                           onPressed: () {
                             setState(() {
-                              // bookmark = true;
-                              print("207========");
-                              print(widget.response[index]['id']);
-                              print(bookmark[index]);
                               if (bookmark[index] == null) {
                                 bookmark[index] = true;
                                 final postData = {
@@ -240,12 +226,8 @@ class _ChallengeBank extends State<ChallengeBank> {
                                             fontSize: 16.0);
 
                                       } else {
-                                        print(responseData);
                                         var responseJson =
                                         json.decode(responseData);
-                                        print(
-                                            responseJson['message']);
-
                                         Fluttertoast.showToast(
                                             msg: responseJson[
                                             'error'],
@@ -290,12 +272,8 @@ class _ChallengeBank extends State<ChallengeBank> {
                                             fontSize: 16.0);
 
                                       } else {
-                                        print(responseData);
                                         var responseJson =
                                         json.decode(responseData);
-                                        print(
-                                            responseJson['message']);
-
                                         Fluttertoast.showToast(
                                             msg: responseJson[
                                             'error'],
@@ -339,12 +317,8 @@ class _ChallengeBank extends State<ChallengeBank> {
                                             fontSize: 16.0);
 
                                       } else {
-                                        print(responseData);
                                         var responseJson =
                                         json.decode(responseData);
-                                        print(
-                                            responseJson['error']);
-
                                         Fluttertoast.showToast(
                                             msg: responseJson[
                                             'error'],
@@ -381,13 +355,6 @@ class _ChallengeBank extends State<ChallengeBank> {
                         autofocus: true,
                         //Called when the button is tapped or otherwise activated.
                         onPressed: () {
-                          // ignore: avoid_print
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //       const HomeScreen()),
-                          // );
                           setState(() {
                             if (index < widget.response.length) {
                               index++;

@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:CanLi/screens/PT_list.dart';
 class practiceTestLevel extends StatelessWidget {
   const practiceTestLevel({super.key});
   @override
@@ -90,33 +90,12 @@ class practiceTestLevel extends StatelessWidget {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                networkAPICall().httpGetRequest(
-                                    'api/v1/practice/fetch/practice/test?test_type=easy',
-                                    (status, responseData) {
-                                  if (status) {
-                                    final mainJson = json.decode(responseData);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => practiceTest(
-                                              response: mainJson['response'])),
-                                    );
-                                  } else {
-                                    print(responseData);
-                                    var responseJson =
-                                        json.decode(responseData);
-                                    print(responseJson['message']);
-
-                                    Fluttertoast.showToast(
-                                        msg: responseJson['error'],
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  }
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => pt_list(
+                                          test_type: 'easy')),
+                                );
                               },
                             ),
                           ),
@@ -164,33 +143,12 @@ class practiceTestLevel extends StatelessWidget {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                networkAPICall().httpGetRequest(
-                                    'api/v1/practice/fetch/practice/test?test_type=medium',
-                                    (status, responseData) {
-                                  if (status) {
-                                    final mainJson = json.decode(responseData);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => practiceTest(
-                                              response: mainJson['response'])),
-                                    );
-                                  } else {
-                                    print(responseData);
-                                    var responseJson =
-                                        json.decode(responseData);
-                                    print(responseJson['message']);
-
-                                    Fluttertoast.showToast(
-                                        msg: responseJson['error'],
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  }
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => pt_list(
+                                          test_type: 'medium')),
+                                );
                               },
                             ),
                           ),
@@ -238,33 +196,12 @@ class practiceTestLevel extends StatelessWidget {
                                 side: BorderSide(color: Colors.transparent),
                               ),
                               onPressed: () {
-                                networkAPICall().httpGetRequest(
-                                    'api/v1/practice/fetch/practice/test?test_type=hard',
-                                    (status, responseData) {
-                                  if (status) {
-                                    final mainJson = json.decode(responseData);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => practiceTest(
-                                              response: mainJson['response'])),
-                                    );
-                                  } else {
-                                    print(responseData);
-                                    var responseJson =
-                                        json.decode(responseData);
-                                    print(responseJson['message']);
-
-                                    Fluttertoast.showToast(
-                                        msg: responseJson['error'],
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  }
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => pt_list(
+                                          test_type: 'hard')),
+                                );
                               },
                             ),
                           ),
