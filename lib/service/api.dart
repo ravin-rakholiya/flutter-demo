@@ -59,7 +59,8 @@ class networkAPICall {
     var httpHeaders = this.commonHeaders;
     await getStringValuesSF();
     print("62------"+_token.toString());
-    httpHeaders["Authorization"]= "Bearer "+_token.toString();
+    if(_token!=null){
+    httpHeaders["Authorization"]= "Bearer "+_token.toString();}
     print("60--------");
     print(httpHeaders);
     // if (headers != null) {

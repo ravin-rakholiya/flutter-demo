@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final Uri _url =
-    Uri.parse('https://canli-team.github.io/Canli/privacypolicyterms.htmlx');
+    Uri.parse('https://canli-team.github.io/Canli/privacypolicyterms.html');
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});

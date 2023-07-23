@@ -170,14 +170,8 @@ class HomeScreen extends StatelessWidget {
                                 networkAPICall().httpGetRequest(
                                     'api/v1/practice/bookmark/question',
                                         (status, responseData) {
-                                      // print("173===================");
-                                      // print(json.decode(responseData));
-                                      // print(status);
                                       if (status) {
                                         final mainJson = json.decode(responseData);
-                                        // print(mainJson);
-                                        // List<dynamic> data = mainJson['response'];
-                                        // print(data);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
