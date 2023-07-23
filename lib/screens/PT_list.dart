@@ -19,8 +19,8 @@ class pt_list extends StatelessWidget {
               color: Colors.indigo,
             ),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const practiceTest()));
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (BuildContext context) => const practiceTest()));
             },
           ),
         ),
