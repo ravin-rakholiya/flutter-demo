@@ -85,6 +85,10 @@ class networkAPICall {
         final d = response.body;
         print('WebServiceRequest - $serviceUrl \nResponse - $d');
         completionHandler(false, d);
+      }else if (response.statusCode == 201) {
+        final d = response.body;
+        print('WebServiceRequest - $serviceUrl \nResponse - $d');
+        completionHandler(true, d);
       } else if (response.statusCode == 400) {
         final d = response.body;
         print('WebServiceRequest - $serviceUrl \nResponse - $d');

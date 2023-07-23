@@ -1,4 +1,3 @@
-import 'package:CanLi/screens/edit_profile.dart';
 import 'package:CanLi/screens/homeScreen.dart';
 import 'package:CanLi/screens/practiceTest.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +23,19 @@ class practiceTestLevel extends StatelessWidget {
               color: Colors.indigo,
             ),
             onPressed: () {
+              int value = 0;
+              networkAPICall().httpGetRequest(
+                  'api/v1/practice/fetch/progress',
+                      (status, responseData) {
+                    if (status) {
+                      final mainJson = json.decode(responseData);
+                      value = mainJson['response'];
+                    } else {
+                      value = 0;
+                    }
+                  });
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const HomeScreen()));
+                  builder: (BuildContext context) => HomeScreen(value: value)));
             },
           ),
         ),

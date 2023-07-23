@@ -1,7 +1,11 @@
 import 'package:CanLi/screens/feeback.dart';
 import 'package:flutter/material.dart';
 import 'package:CanLi/screens/homeScreen.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
+import 'package:CanLi/screens/profile.dart';
 class editProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,8 +36,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
             color: Colors.indigo,
           ),
           onPressed: () {
+            // int value = 0;
+            // networkAPICall().httpGetRequest(
+            //     'api/v1/practice/fetch/progress',
+            //         (status, responseData) {
+            //       if (status) {
+            //         final mainJson = json.decode(responseData);
+            //         value = mainJson['response'];
+            //       } else {
+            //         value = 0;
+            //       }
+            //     });
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => const HomeScreen()));
+                builder: (BuildContext context) =>  ProfileScreen()));
           },
         ),
         // actions: [
@@ -82,9 +97,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage(
-                                "https://img.freepik.com/free-vector/hand-drawn-asian-face-cartoon-illustration_52683-117201.jpg?w=740&t=st=1689312058~exp=1689312658~hmac=b0a6453f6f36423153e1c944ffae8f48ba3bb36714a92d5257d0dfaff33fbac2",
-                              ))),
+                              image:AssetImage(
+                                  "images/logo/profile.png"))),
                     ),
                     Positioned(
                         bottom: 0,

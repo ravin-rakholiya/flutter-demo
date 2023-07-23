@@ -176,6 +176,17 @@ class _OTPVerificationState extends State<OTPVerification> {
                                 }
                                 print("145-------");
                                 print(postData);
+                                int value = 0;
+                                networkAPICall().httpGetRequest(
+                                    'api/v1/practice/fetch/progress',
+                                        (status, responseData) {
+                                      if (status) {
+                                        final mainJson = json.decode(responseData);
+                                        value = mainJson['response'];
+                                      } else {
+                                        value = 0;
+                                      }
+                                    });
                                 networkAPICall().httpPostRequest(
                                     'api/v1/user/verify_otp', postData,
                                     (status, responseData) {
@@ -204,7 +215,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HomeScreen(),
+                                        builder: (context) => HomeScreen(value: value),
                                       ),
                                     );
                                   } else {

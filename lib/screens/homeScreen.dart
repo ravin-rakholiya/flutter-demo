@@ -9,19 +9,45 @@ import 'package:CanLi/screens/signup.dart';
 import 'package:CanLi/screens/profile.dart';
 import 'package:CanLi/screens/progressBar.dart';
 import 'package:CanLi/screens/starredNotes.dart';
-import 'package:CanLi/screens/ChallengeBank.dart';
 import 'package:CanLi/screens/moduleBasedLearningHome.dart';
-import 'package:CanLi/screens/profile.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final int value;
+  const HomeScreen({super.key,required this.value});
+
+  addStringToSF(
+      String email,
+      int user_id,
+      String full_name,
+      String location_city,
+      String test_date,
+      String dob,
+      ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("31----------");
+    print(user_id);
+    prefs.setString('email', email);
+    prefs.setInt('user_id', user_id);
+    prefs.setString('full_name', full_name);
+    prefs.setString('location_city', location_city);
+    prefs.setString('test_date', test_date);
+    prefs.setString('dob', dob);
+  }
   @override
   Widget _stepIndicator(BuildContext context) {
-    int value = 50;
+    String? _email = '';
+    String? _full_name = '';
+    String? _location_city = '';
+    String? _test_date = '';
+    String? _dob = '';
+
+
+
+
     return Column(
       children: [
         SizedBox(
@@ -105,6 +131,31 @@ class HomeScreen extends StatelessWidget {
               ),
               iconSize: 40,
               onPressed: () {
+                networkAPICall().httpGetRequest(
+                    'api/v1/user/edit/profile',
+                        (status, responseData) {
+                      if (status) {
+                        final mainJson = json.decode(responseData);
+                        var response = mainJson['response'];
+                        int user_id = response['id'];
+                        String full_name = response['full_name'];
+                        String dob = response['dob'];
+                        String location_city = response['location_city'];
+                        String test_date = response['test_date'];
+                        String username = response['username'];
+                        print(response);
+                         addStringToSF(username, user_id, full_name, location_city, test_date, dob);
+                        print(mainJson);
+                      } else {
+                        print(responseData);
+                        var responseJson =
+                        json.decode(responseData);
+                        print(
+                            responseJson['message']);
+
+
+                      }
+                    });
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => ProfileScreen()));
               },
@@ -115,12 +166,6 @@ class HomeScreen extends StatelessWidget {
           // color: Colors.white,
           child: Column(
             children: [
-              // Container(
-              //   // margin: const EdgeInsets.fromLTRB(0, 55, 0, 0),
-              //   width: MediaQuery.of(context).size.width,
-              //   color:Colors.indigo,
-              //   height:36,
-              // ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width - 220,
@@ -199,9 +244,6 @@ class HomeScreen extends StatelessWidget {
                                             fontSize: 16.0);
                                       }
                                     });
-
-
-
                               },
                             ),
                           ),

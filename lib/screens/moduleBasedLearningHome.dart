@@ -2,7 +2,6 @@ import 'package:CanLi/screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:CanLi/screens/signup.dart';
-import 'package:CanLi/screens/PT_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:CanLi/service/api.dart';
 import 'dart:convert' show json;
@@ -30,8 +29,19 @@ class moduleBasedLearningHome extends StatelessWidget {
               color: Colors.indigo,
             ),
             onPressed: () {
+              int value = 0;
+              networkAPICall().httpGetRequest(
+                  'api/v1/practice/fetch/progress',
+                      (status, responseData) {
+                    if (status) {
+                      final mainJson = json.decode(responseData);
+                      value = mainJson['response'];
+                    } else {
+                      value = 0;
+                    }
+                  });
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => const HomeScreen()));
+                  builder: (BuildContext context) => HomeScreen(value: value,)));
             },
           ),
         ),
@@ -265,10 +275,21 @@ class moduleBasedLearningHome extends StatelessWidget {
                                   shape: const StadiumBorder(),
                                   side: BorderSide(color: Colors.transparent)),
                               onPressed: () {
+                                int value = 0;
+                                networkAPICall().httpGetRequest(
+                                    'api/v1/practice/fetch/progress',
+                                        (status, responseData) {
+                                      if (status) {
+                                        final mainJson = json.decode(responseData);
+                                        value = mainJson['response'];
+                                      } else {
+                                        value = 0;
+                                      }
+                                    });
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HomeScreen()),
+                                      builder: (context) => HomeScreen(value: value,)),
                                 );
                               },
                             ),

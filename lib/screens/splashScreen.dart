@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:CanLi/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:CanLi/screens/homeScreen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,8 +21,21 @@ class _SplashScreenState extends State<SplashScreen>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString("token");
     if (_token != "" && _token != null) {
+      int value = 0;
+      networkAPICall().httpGetRequest(
+          'api/v1/practice/fetch/progress',
+              (status, responseData) {
+            if (status) {
+              final mainJson = json.decode(responseData);
+              value =  mainJson['response'];
+              print(mainJson);
+            } else {
+              value = 0;
+            }
+          });
+      print(value);
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+          .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen(value:value)));
     } else {
       //replace it with the login page
       Navigator.pushReplacement(

@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:CanLi/screens/profile.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class FeedbackScreen extends StatelessWidget {
-  const FeedbackScreen({super.key});
+class FeedbackScreen extends StatefulWidget {
+  FeedbackScreen({super.key});
+  @override
+  State<StatefulWidget> createState() {
+    return _FeedbackScreenState();
+  }
+}
 
+class _FeedbackScreenState extends State<FeedbackScreen> {
+  final feedbackController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -69,65 +80,11 @@ class FeedbackScreen extends StatelessWidget {
                               maxLines: 1,
                               // softWrap: false,
                               style: TextStyle(
-                                  color: Colors.indigo,
+                                  color: Color.fromRGBO(29, 39, 73,1),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 40))),
-                      const Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 260, 0),
-                          child: Text("Name",
-                              overflow: TextOverflow.visible,
-                              maxLines: 1,
-                              // softWrap: false,
-                              style: TextStyle(
-                                  color: Colors.indigo,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20))),
-                      const Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
-                        child: TextField(
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            border: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                                borderSide: BorderSide(color: Colors.indigo)),
-                            filled: true,
-                            contentPadding: EdgeInsets.only(
-                                bottom: 10.0, left: 10.0, right: 10.0),
-                            labelText: "EX. NICK JONES",
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 160, 0),
-                          child: Text("EMAIL ADDRESS",
-                              overflow: TextOverflow.visible,
-                              maxLines: 1,
-                              // softWrap: false,
-                              style: TextStyle(
-                                  color: Colors.indigo,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20))),
-                      const Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
-                        child: TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            border: InputBorder.none,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                                borderSide: BorderSide(color: Colors.indigo)),
-                            filled: true,
-                            contentPadding: EdgeInsets.only(
-                                bottom: 10.0, left: 10.0, right: 10.0),
-                            labelText: "EXAMPLE@GMAIL.COM",
-                          ),
-                        ),
-                      ),
+
+
                       const Padding(
                           padding: const EdgeInsets.fromLTRB(0, 10, 200, 0),
                           child: Text("FEEDBACK",
@@ -135,27 +92,28 @@ class FeedbackScreen extends StatelessWidget {
                               maxLines: 1,
                               // softWrap: false,
                               style: TextStyle(
-                                  color: Colors.indigo,
+                                  color: Color.fromRGBO(29, 39, 73,1),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20))),
-                      const Padding(
+                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
                         child: TextField(
+                          controller: feedbackController,
                           keyboardType: TextInputType.multiline,
-                          maxLength: 225,
+                          maxLength: 350,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15.0)),
-                                borderSide: BorderSide(color: Colors.indigo)),
+                                borderSide: BorderSide(color: Color.fromRGBO(29, 39, 73,1))),
                             filled: true,
                             contentPadding: EdgeInsets.only(
                                 bottom: 20.0, left: 10.0, right: 10.0),
                             labelText: "ENTER FEEDBACK",
                           ),
-                          maxLines: 6,
+                          maxLines: 14,
                         ),
                       ),
                       Padding(
@@ -166,28 +124,60 @@ class FeedbackScreen extends StatelessWidget {
                               autofocus: true,
                               //Called when the button is tapped or otherwise activated.
                               onPressed: () {
-                                // ignore: avoid_print
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ProfileScreen()),
-                                );
+                                var postData = {
+                                  'feedback': feedbackController.text,
+
+                                };
+                                networkAPICall().httpPostRequest(
+                                    'api/v1/user/add/feedback', postData,
+                                        (status, responseData) {
+                                      print("***************");
+                                      print(status);
+                                      if (status) {
+                                        final mainJson = json.decode(responseData);
+                                        Fluttertoast.showToast(
+                                            msg: mainJson['response'],
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                               ProfileScreen()),
+                                        );
+                                      } else {
+                                        var responseJson =
+                                        json.decode(responseData);
+                                        Fluttertoast.showToast(
+                                            msg: responseJson['error'],
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
+
                               },
                               //Customizes this button's appearance
                               style: TextButton.styleFrom(
                                   primary: Colors.white,
-                                  backgroundColor: Colors.indigo,
-                                  onSurface: Colors.indigo,
-                                  shadowColor: Colors.indigo,
+                                  backgroundColor: Color.fromRGBO(29, 39, 73,1),
+                                  onSurface: Color.fromRGBO(29, 39, 73,1),
+                                  shadowColor: Color.fromRGBO(29, 39, 73,1),
                                   elevation: 5,
                                   side: const BorderSide(
-                                      color: Colors.indigo, width: 1),
+                                      color: Color.fromRGBO(29, 39, 73,1), width: 1),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(28.0),
                                   ),
                                   textStyle: const TextStyle(
-                                    color: Colors.indigo,
+                                    color: Color.fromRGBO(29, 39, 73,1),
                                     fontSize: 20,
                                     fontStyle: FontStyle.normal,
                                   )),

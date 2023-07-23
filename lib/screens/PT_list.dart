@@ -1,4 +1,3 @@
-import 'package:CanLi/screens/edit_profile.dart';
 import 'package:CanLi/screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
