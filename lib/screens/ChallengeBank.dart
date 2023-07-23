@@ -3,9 +3,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChallengeBank extends StatefulWidget {
-  const ChallengeBank({Key? key}) : super(key: key);
+
+  final List<dynamic> response;
+  const ChallengeBank({Key? key, required this.response}) : super(key: key);
 
   @override
   _ChallengeBank createState() => _ChallengeBank();
@@ -13,42 +19,32 @@ class ChallengeBank extends StatefulWidget {
 
 class _ChallengeBank extends State<ChallengeBank> {
   String title = "";
-  List<int> questionNo = [1, 2, 3, 4, 5];
+  // List<int> questionNo = [];
   Map<int, bool> bookmark = {};
   Map<String, bool> selected = {};
   Map<String, bool> turnGreen = {};
 
-  List<String> questions = [
-    "If a fully licensed driver is convicted of using a hand-held electronic device while driving, they will face which of the following penalties for a first offence?",
-    "Do NOT park anywhere that you don't have a clear view for at least _____ metres in both directions.",
-    "If you are found guilty of carrying a child passenger who is not properly secured, ____ demerit points will be added to your driving record.",
-    "If you are found guilty of going the wrong way on a one-way road, ____ demerit points will be added to your driving record.",
-    "If you are found guilty of backing on a highway or driving too slowly, ____ demerit points will be added to your driving record."
-  ];
+  List<String> questions = [];
 
-  List<String> options = [
-    "A fine of up to 1000 dollar and 3 demerit points; A fine of 5000 dollar only; 1 year of jail; Nothing will happen",
-    "100; 125; 5; 36",
-    "4; 6; 2; 1",
-    "1; 4; 10; 3",
-    "5; 2; 9; 12"
-  ];
+  List<String> options = [];
 
-  List<String> answers = [
-    "A fine of up to 1000 dollar and 3 demerit points",
-    "125",
-    "2",
-    "3",
-    "2"
-  ];
+  List<String> answers = [];
   int index = 0;
   // bool selected = false;
 
-  Padding generateQuestion(String question) {
+  Padding generateQuestion(int index) {
+    if (widget.response[index]['question_type']=="sign"){
+      String contentURL = widget.response[index]['content']['content'];
+      return Padding(
+          padding: EdgeInsets.only(top: 50, left: 10),
+          child: Image.network(contentURL)
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.only(top: 50, left: 10),
       child: Text(
-        question.toString(),
+        widget.response[index]['question'],
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -56,12 +52,12 @@ class _ChallengeBank extends State<ChallengeBank> {
         ),
       ),
     );
+
   }
 
-  List generateNoOfOptions(String op) {
-    List opt = op.split(";");
+  List generateNoOfOptions(int index) {
+    List opt = widget.response[index]['option'].split(";");
     List<Padding> pd = [];
-    debugPrint(opt.toString());
 
     for (int i = 0; i < opt.length; i++) {
       Padding wid = generateOption(opt[i]);
@@ -71,19 +67,25 @@ class _ChallengeBank extends State<ChallengeBank> {
   }
 
   Padding generateOption(String option) {
-    // List strings = [option.split(";")];
-    // debugPrint(option.toString());
+    var opt = option.trim();
+    var opt_value = widget.response[index]['answer'].trim();
+    if(opt[opt.length-1]=="."){
+      opt = opt.trim().substring(0, opt.length - 1);
+    }
+    if(opt_value[opt_value.toString().length-1] == "."){
+      opt_value = opt_value.trim().substring(0, opt_value.length - 1);
+    }
     return Padding(
       padding: EdgeInsets.only(top: 24, left: 10, right: 10),
       child: Card(
         clipBehavior: Clip.hardEdge,
         color: Color(0XFF1D2749),
-        shape: ((selected[option] == true) && (option == answers[index])) ||
+        shape: ((selected[option] == true) && (opt == opt_value)) ||
             (turnGreen[answers[index]] == true)
             ? RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: Colors.green, width: 6))
-            : (selected[option] == true) && (option != answers[index])
+            : (selected[option] == true) && (opt != opt_value)
             ? RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: Colors.red, width: 6))
@@ -92,8 +94,6 @@ class _ChallengeBank extends State<ChallengeBank> {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
-            // debugPrint('Card tapped.');
-            debugPrint(option);
             setState(() {
               if (selected[option] == null || false) {
                 selected[option] = true;
@@ -132,6 +132,10 @@ class _ChallengeBank extends State<ChallengeBank> {
 
   @override
   Widget build(BuildContext context) {
+    final List<int> questionNo = [for (var i = 1; i <= widget.response.length; i++) i];
+    questions = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
+    answers = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
+    options = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -149,7 +153,7 @@ class _ChallengeBank extends State<ChallengeBank> {
           child: Column(children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width + 190,
+              height: MediaQuery.of(context).size.width + 192,
               padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
               decoration: const BoxDecoration(
                 color: Color(0xFFF2F2FA),
@@ -163,11 +167,11 @@ class _ChallengeBank extends State<ChallengeBank> {
                   children: [
                     Column(
                       children: [
-                        generateQuestion(questions[index].toString()),
+                        generateQuestion(index.toInt()),
                         Padding(
                           padding: EdgeInsets.only(top: 50),
                         ),
-                        ...generateNoOfOptions(options[index]),
+                        ...generateNoOfOptions(index),
                       ],
                     ),
                   ],
@@ -176,12 +180,11 @@ class _ChallengeBank extends State<ChallengeBank> {
             ),
             Container(
               child: Row(
-                // padding: EdgeInsets.only(top: 24, left: 0),
                 children: [
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 36, left: 20),
+                      padding: EdgeInsets.only(top: 30, left: 10),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
@@ -194,14 +197,142 @@ class _ChallengeBank extends State<ChallengeBank> {
                           ),
                           onPressed: () {
                             setState(() {
-                              // bookmark = true;
-                              debugPrint(bookmark[index].toString());
                               if (bookmark[index] == null) {
                                 bookmark[index] = true;
+                                final postData = {
+                                  'question_id': widget.response[index]['id'],
+                                  'bookmark': "True",
+
+                                };
+                                networkAPICall().httpPostRequest(
+                                    'api/v1/practice/bookmark/question',
+                                    postData,
+                                        (status, responseData) {
+                                      if (status) {
+                                        final mainJson =
+                                        json.decode(responseData);
+                                        String message =
+                                        mainJson['response'];
+                                        Fluttertoast.showToast(
+                                            msg: message,
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+
+                                      } else {
+                                        var responseJson =
+                                        json.decode(responseData);
+                                        Fluttertoast.showToast(
+                                            msg: responseJson[
+                                            'error'],
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
                               } else if (bookmark[index] == false) {
                                 bookmark[index] = true;
+
+                                final postData = {
+                                  'question_id': widget.response[index]['id'],
+                                  'bookmark': "True",
+
+                                };
+                                networkAPICall().httpPostRequest(
+                                    'api/v1/practice/bookmark/question',
+                                    postData,
+                                        (status, responseData) {
+                                      if (status) {
+                                        final mainJson =
+                                        json.decode(responseData);
+                                        String message =
+                                        mainJson['response'];
+                                        Fluttertoast.showToast(
+                                            msg: message,
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+
+                                      } else {
+                                        var responseJson =
+                                        json.decode(responseData);
+                                        Fluttertoast.showToast(
+                                            msg: responseJson[
+                                            'error'],
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
                               } else {
                                 bookmark[index] = false;
+                                final postData = {
+                                  'question_id': widget.response[index]['id'],
+                                  'bookmark': "False",
+
+                                };
+                                networkAPICall().httpPostRequest(
+                                    'api/v1/practice/bookmark/question',
+                                    postData,
+                                        (status, responseData) {
+                                      if (status) {
+                                        final mainJson =
+                                        json.decode(responseData);
+                                        String message =
+                                        mainJson['response'];
+                                        Fluttertoast.showToast(
+                                            msg: message,
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+
+                                      } else {
+                                        var responseJson =
+                                        json.decode(responseData);
+                                        Fluttertoast.showToast(
+                                            msg: responseJson[
+                                            'error'],
+                                            toastLength:
+                                            Toast.LENGTH_SHORT,
+                                            gravity:
+                                            ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor:
+                                            Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
                               }
                               // debugPrint(bookmark.toString());
                             });
@@ -218,21 +349,14 @@ class _ChallengeBank extends State<ChallengeBank> {
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 60, right: 20),
+                      padding: EdgeInsets.only(top: 45, right: 20),
                       child: TextButton(
                         //True if this widget will be selected as the initial focus when no other node in its scope is currently focused.
                         autofocus: true,
                         //Called when the button is tapped or otherwise activated.
                         onPressed: () {
-                          // ignore: avoid_print
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //       const HomeScreen()),
-                          // );
                           setState(() {
-                            if (index < 4) {
+                            if (index < widget.response.length) {
                               index++;
                             } else {
                               index = 0;
@@ -245,7 +369,7 @@ class _ChallengeBank extends State<ChallengeBank> {
                           backgroundColor: Color(0XFF1D2749),
                           onSurface: Colors.indigo,
                           shadowColor: Colors.indigo,
-                          elevation: 5,
+                          elevation: 15,
                           side:
                           const BorderSide(color: Colors.indigo, width: 1),
                           shape: RoundedRectangleBorder(

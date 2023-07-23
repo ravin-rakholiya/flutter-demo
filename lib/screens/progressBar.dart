@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Flutter code sample for [LinearProgressIndicator].
 
 void main() => runApp(const ProgressIndicatorApp());
-double initial = 0.5;
+double initial = 0.3;
 
 class ProgressIndicatorApp extends StatelessWidget {
   const ProgressIndicatorApp({super.key});

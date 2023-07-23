@@ -3,9 +3,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:CanLi/service/api.dart';
+import 'dart:convert' show json;
 
 class bookmarkQuestionScreen extends StatefulWidget {
-  const bookmarkQuestionScreen({Key? key}) : super(key: key);
+  final List<dynamic> response;
+  const bookmarkQuestionScreen({Key? key, required this.response})
+      : super(key: key);
 
   @override
   _bookmarkQuestionScreen createState() => _bookmarkQuestionScreen();
@@ -13,32 +18,28 @@ class bookmarkQuestionScreen extends StatefulWidget {
 
 class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
   String title = "";
-  List<int> questionNo = [1, 2, 3, 4, 5];
+  // List<int> questionNo = [1, 2, 3, 4, 5];
   Map<int, bool> bookmark = {};
   // bool bookmark = false;
 
-  List<String> questions = [
-    "If a fully licensed driver is convicted of using a hand-held electronic device while driving, they will face which of the following penalties for a first offence?",
-    "Do NOT park anywhere that you don't have a clear view for at least _____ metres in both directions.",
-    "If you are found guilty of carrying a child passenger who is not properly secured, ____ demerit points will be added to your driving record.",
-    "If you are found guilty of going the wrong way on a one-way road, ____ demerit points will be added to your driving record.",
-    "If you are found guilty of backing on a highway or driving too slowly, ____ demerit points will be added to your driving record."
-  ];
+  List<String> questions = [];
 
-  List<String> answers = [
-    "A fine of up to 1000 dollar and 3 demerit points",
-    "125",
-    "2",
-    "3",
-    "2"
-  ];
+  List<String> answers = [];
+
   int index = 0;
 
-  Padding generateQuestion(String question) {
+  Padding generateQuestion(int index) {
+    if (widget.response[index]['question_type'] == "sign") {
+      String contentURL = widget.response[index]['content']['content'];
+      return Padding(
+          padding: EdgeInsets.only(top: 50, left: 10),
+          child: Image.network(contentURL));
+    }
+
     return Padding(
       padding: EdgeInsets.only(top: 50, left: 10),
       child: Text(
-        question.toString(),
+        widget.response[index]['question'],
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
@@ -48,7 +49,7 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
     );
   }
 
-  Padding generateOption(String option) {
+  Padding generateOption(int index) {
     return Padding(
       padding: EdgeInsets.only(top: 24, left: 10, right: 10),
       child: Card(
@@ -72,7 +73,7 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(12),
                     child: Text(
-                      option.toString(),
+                      widget.response[index]['answer'],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 22,
@@ -91,10 +92,20 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    questions = [
+      for (var i = 1; i <= widget.response.length; i++) i.toString()
+    ];
+    answers = [for (var i = 1; i <= widget.response.length; i++) i.toString()];
+    List<int> questionNo = [
+      for (var i = 1; i <= widget.response.length; i++) i
+    ];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text((questions[0] == "Nothing inside Bookmark page.") ? "".toString() : (questionNo[index]).toString(),
+        title: Text(
+            (questions[0] == "Nothing inside Bookmark page.")
+                ? "".toString()
+                : (questionNo[index]).toString(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
@@ -122,11 +133,11 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                   children: [
                     Column(
                       children: [
-                        generateQuestion(questions[index].toString()),
+                        generateQuestion(index),
                         Padding(
                           padding: EdgeInsets.only(bottom: 150),
                         ),
-                        if (answers[0] != "") generateOption(answers[index].toString()),
+                        if (answers[0] != "") generateOption(index),
                       ],
                     ),
                   ],
@@ -172,17 +183,37 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                                   if (questions.isNotEmpty) {
                                     questions.remove(questions[index]);
                                     answers.remove(answers[index]);
-                                    index = 0;
-                                    debugPrint(bookmark.toString());
+                                    int question_id =
+                                        widget.response[index]['id'];
+                                    final postData = {
+                                      'question_id': question_id,
+                                      'bookmark': false,
+                                    };
+                                    networkAPICall().httpPostRequest(
+                                        "api/v1/practice/bookmark/question",
+                                        postData, (status, data) {
+                                      if (status) {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "bookmark removed successfully.",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    });
                                   }
                                   if (questions.isEmpty) {
-                                    questions = ["Nothing inside Bookmark page."];
+                                    questions = [
+                                      "Nothing inside Bookmark page."
+                                    ];
                                     answers = [""];
                                   }
                                 } catch (e) {
                                   debugPrint(e.toString());
                                 }
-                                debugPrint(bookmark.toString());
                               });
                             },
                             //Customizes this button's appearance
@@ -191,7 +222,7 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                                 backgroundColor: Color(0XFF1D2749),
                                 onSurface: Colors.indigo,
                                 shadowColor: Colors.indigo,
-                                elevation: 5,
+                                elevation: 15,
                                 side: const BorderSide(
                                     color: Colors.indigo, width: 1),
                                 shape: RoundedRectangleBorder(
@@ -210,15 +241,18 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
                                 Container(
                                   child: Padding(
                                     padding:
-                                    const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                        const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                     child: Row(
                                       children: [
                                         SizedBox(width: 10),
                                         Icon(Icons.bookmark_remove, size: 24),
-                                        Text('Remove', style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),),
+                                        Text(
+                                          'Remove',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

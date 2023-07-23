@@ -179,15 +179,10 @@ class _OTPVerificationState extends State<OTPVerification> {
                                 networkAPICall().httpPostRequest(
                                     'api/v1/user/verify_otp', postData,
                                     (status, responseData) {
-                                  print("149-----------");
-                                  print(status);
-                                  print(responseData);
-                                  print("152----------");
                                   if (status) {
                                     final mainJson = json.decode(responseData);
                                     print(mainJson);
                                     String token = mainJson['token'];
-                                    print("179--------");
                                     addStringToSF(token, mainJson['user']['id']);
                                     print(mainJson['user']);
                                     print(mainJson['user']['id']);
@@ -213,13 +208,8 @@ class _OTPVerificationState extends State<OTPVerification> {
                                       ),
                                     );
                                   } else {
-                                    print("198------");
-                                    print(responseData);
                                     var responseJson =
                                         json.decode(responseData);
-                                    print(responseJson);
-                                    print(responseJson['error']);
-                                    print("204-------");
                                     Fluttertoast.showToast(
                                         msg: responseJson['error'],
                                         toastLength: Toast.LENGTH_SHORT,
