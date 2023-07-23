@@ -97,6 +97,54 @@ class _bookmarkQuestionScreen extends State<bookmarkQuestionScreen> {
     List<int> questionNo = [
       for (var i = 1; i <= widget.response.length; i++) i
     ];
+    print("100----------");
+    print(questions);
+    if(questions.length == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Nothing inside Bookmark page.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              )),
+          backgroundColor: Color(0XFF1D2749),
+          leading: BackButton(
+            color: Colors.white,
+          ),
+        ),
+        body: Material(
+            color: Colors.white,
+            child: Column(children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width + 180,
+                padding: EdgeInsets.fromLTRB(10, 30, 10, 50),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF2F2FA),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(100),
+                    bottomRight: Radius.circular(100),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Bookmarked Bin Is Empty.",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.lato().fontFamily,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ])),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -127,9 +127,56 @@ class _practiceTest extends State<practiceTest> {
 
   @override
   Widget build(BuildContext context) {
+
     final List<int> questionNo = [
       for (var i = 1; i <= widget.response.length; i++) i
     ];
+    print("134------");
+    if(questionNo.length==0){
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Nothing inside Challenge page.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              )),
+          backgroundColor: Color(0XFF1D2749),
+          leading: BackButton(
+            color: Colors.white,
+          ),
+        ),
+        body: Material(
+            color: Colors.white,
+            child: Column(children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width + 180,
+                padding: EdgeInsets.fromLTRB(10, 30, 10, 50),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF2F2FA),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(100),
+                    bottomRight: Radius.circular(100),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Challanged Bin Is Empty.",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.lato().fontFamily,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ])),
+      );
+    }
     if(widget.response[index]['is_bookmarked'] == null){
       widget.response[index]['is_bookmarked'] = false;
     }
@@ -141,6 +188,7 @@ class _practiceTest extends State<practiceTest> {
     if (index == questionNo.length+1) {
       index = 0;
     }
+    print("144----------");
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

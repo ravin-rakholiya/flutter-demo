@@ -525,11 +525,7 @@ class HomeScreen extends StatelessWidget {
                                   shape: const StadiumBorder(),
                                   side: BorderSide(color: Colors.transparent)),
                               onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => SignUpScreen()),
-                                // );
+
                               },
                             ),
                           )
