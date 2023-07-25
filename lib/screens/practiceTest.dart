@@ -91,7 +91,14 @@ class _practiceTest extends State<practiceTest> {
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
             setState(() {
+              print("tapping");
+              print(selected[option]);
               if (selected[option] == null || false) {
+                if(opt != opt_value);
+                {
+
+                  }
+
                 selected[option] = true;
               }
             });
