@@ -213,75 +213,8 @@ class LoginScreen extends StatelessWidget {
                                       fontSize: 22)),
                             ),
                           )),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(55, 20, 10, 10),
-                        child: Container(
-                            child: Row(
-                          children: [
-                            Container(
-                              height: 1.0,
-                              width: 70.0,
-                              color: Colors.black,
-                            ),
-                            Text("    OR CONTINUE WITH    ",
-                                style: TextStyle(
-                                    color: Colors.blueGrey,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12)),
-                            Container(
-                              height: 1.0,
-                              width: 70.0,
-                              color: Colors.black,
-                            ),
-                          ],
-                        )),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
-                          child: Container(
-                            child: TextButton(
-                              //True if this widget will be selected as the initial focus when no other node in its scope is currently focused.
-                              autofocus: true,
-                              //Called when the button is tapped or otherwise activated.
-                              onPressed: () {
-                                // ignore: avoid_print
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                           OTPVerification()),
-                                );
-                              },
-                              //Customizes this button's appearance
-                              style: TextButton.styleFrom(
-                                  primary: Colors.white,
-                                  backgroundColor: Colors.indigo,
-                                  onSurface: Colors.indigo,
-                                  shadowColor: Colors.indigo,
-                                  elevation: 5,
-                                  side: const BorderSide(
-                                      color: Colors.indigo, width: 1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(28.0),
-                                  ),
-                                  textStyle: const TextStyle(
-                                    color: Colors.indigo,
-                                    fontSize: 20,
-                                    fontStyle: FontStyle.normal,
-                                  )),
 
-                              //Typically the button's label.
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Image.asset(
-                                      "images/logo/google_logo.png"), // <-- Use 'Image.asset(...)' here
-                                  SizedBox(width: 2),
-                                  Text(' Continue with Google     '),
-                                ],
-                              ),
-                            ),
-                          )),
+
                       Padding(
                         padding: const EdgeInsets.only(top: 30.0),
                         child: Text(

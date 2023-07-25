@@ -25,14 +25,11 @@ class _OTPVerificationState extends State<OTPVerification> {
 
   addStringToSF(
       String token,
-      int user_id,
       ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("31----------");
     print(token);
-    print(user_id);
     prefs.setString('token', token);
-    prefs.setInt('user_id', user_id);
   }
   getStringValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -177,16 +174,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                                 print("145-------");
                                 print(postData);
                                 int value = 0;
-                                networkAPICall().httpGetRequest(
-                                    'api/v1/practice/fetch/progress',
-                                        (status, responseData) {
-                                      if (status) {
-                                        final mainJson = json.decode(responseData);
-                                        value = mainJson['response'];
-                                      } else {
-                                        value = 0;
-                                      }
-                                    });
+
                                 networkAPICall().httpPostRequest(
                                     'api/v1/user/verify_otp', postData,
                                     (status, responseData) {
@@ -194,28 +182,43 @@ class _OTPVerificationState extends State<OTPVerification> {
                                     final mainJson = json.decode(responseData);
                                     print(mainJson);
                                     String token = mainJson['token'];
-                                    addStringToSF(token, mainJson['user']['id']);
-                                    print(mainJson['user']);
-                                    print(mainJson['user']['id']);
-                                    print(mainJson['user']['location_city']);
-                                    print((mainJson['user']['email_verified']).runtimeType);
-                                    print((mainJson['user']['test_date']).runtimeType);
-                                    print((mainJson['user']['dob']).runtimeType);
-                                    int id = mainJson['user']['id'];
-                                    String full_name =
-                                        mainJson['user']['full_name'];
-                                    String dob = mainJson['user']['dob'];
-                                    // String gender = mainJson['user']['gender'];
-                                    String location_city =
-                                        mainJson['user']['location_city'];
-                                    bool email_verified =
-                                        mainJson['user']['email_verified'];
-                                    String test_date =
-                                        mainJson['user']['test_date'];
+                                    addStringToSF(
+                                        token);
+                                    try {
+                                      // addStringToSF(
+                                      //     token, mainJson['user']['id']);
+                                      print(mainJson['user']);
+                                      print(mainJson['user']['id']);
+                                      print(mainJson['user']['location_city']);
+                                      print((mainJson['user']['email_verified'])
+                                          .runtimeType);
+                                      print((mainJson['user']['test_date'])
+                                          .runtimeType);
+                                      print((mainJson['user']['dob'])
+                                          .runtimeType);
+                                      try {
+                                        int id = mainJson['user']['id'];
+                                      }
+                                      catch (e) {
+                                        int id = 0;
+                                      }
+                                      String full_name =
+                                      mainJson['user']['full_name'];
+                                      String dob = mainJson['user']['dob'];
+                                      // String gender = mainJson['user']['gender'];
+                                      String location_city =
+                                      mainJson['user']['location_city'];
+                                      bool email_verified =
+                                      mainJson['user']['email_verified'];
+                                      String test_date =
+                                      mainJson['user']['test_date'];
+                                    }catch(e){
+                                      print(e);
+                                    }
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HomeScreen(value: value),
+                                        builder: (context) => HomeScreen(value: 2),
                                       ),
                                     );
                                   } else {
